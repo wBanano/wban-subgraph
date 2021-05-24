@@ -1,0 +1,33 @@
+type WBANToken @entity {
+  # token address
+  id: ID!
+
+  # mirrored from the smart contract
+  symbol: String!
+  name: String!
+  decimals: BigInt!
+
+  # used for other stats like marketcap
+  totalSupply: BigInt!
+
+  # token specific volume
+  tradeVolume: BigDecimal!
+  tradeVolumeUSD: BigDecimal!
+  untrackedVolumeUSD: BigDecimal!
+
+  # transactions across all pairs
+  txCount: BigInt!
+
+  # liquidity across all pairs
+  totalLiquidity: BigDecimal!
+
+  # derived prices
+  derivedETH: BigDecimal
+
+  # derived fields
+  #tokenDayData: [TokenDayData!]! @derivedFrom(field: "token")
+  #pairDayDataBase: [PairDayData!]! @derivedFrom(field: "token0")
+  #pairDayDataQuote: [PairDayData!]! @derivedFrom(field: "token1")
+  #pairBase: [Pair!]! @derivedFrom(field: "token0")
+  #pairQuote: [Pair!]! @derivedFrom(field: "token1")
+}

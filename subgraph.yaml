@@ -1,0 +1,28 @@
+specVersion: 0.0.2
+description: wBAN Subgraph
+repository: https://github.com/wBanano/wban-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: WBANToken
+    network: bsc
+    source:
+      address: '0xe20B9e246db5a0d21BF9209E4858Bc9A3ff7A034'
+      abi: WBANToken
+      startBlock: 7921781
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/wban.ts
+      entities:
+        - WBAN
+      abis:
+        - name: WBANToken
+          file: ./abis/WBANToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapToBan(indexed address,string,uint256)
+          handler: handleSwapToBan
