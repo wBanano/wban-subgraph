@@ -1,28 +1,25 @@
 type WBANToken @entity {
-  # token address
+  # wban address
   id: ID!
 
-  # mirrored from the smart contract
-  symbol: String!
-  name: String!
-  decimals: BigInt!
-
   # used for other stats like marketcap
-  totalSupply: BigInt!
+  totalSupply: BigDecimal!
+
+  hodlersCount: BigDecimal!
 
   # token specific volume
-  tradeVolume: BigDecimal!
-  tradeVolumeUSD: BigDecimal!
-  untrackedVolumeUSD: BigDecimal!
+  #tradeVolume: BigDecimal!
+  #tradeVolumeUSD: BigDecimal!
+  #untrackedVolumeUSD: BigDecimal!
 
   # transactions across all pairs
-  txCount: BigInt!
+  #txCount: BigInt!
 
   # liquidity across all pairs
-  totalLiquidity: BigDecimal!
+  #totalLiquidity: BigDecimal!
 
   # derived prices
-  derivedETH: BigDecimal
+  #derivedETH: BigDecimal
 
   # derived fields
   #tokenDayData: [TokenDayData!]! @derivedFrom(field: "token")
@@ -30,4 +27,36 @@ type WBANToken @entity {
   #pairDayDataQuote: [PairDayData!]! @derivedFrom(field: "token1")
   #pairBase: [Pair!]! @derivedFrom(field: "token0")
   #pairQuote: [Pair!]! @derivedFrom(field: "token1")
+}
+
+type User @entity {
+  id: ID!
+  amount: BigDecimal!
+  txnCount: BigDecimal!
+  # liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
+  # usdSwapped: BigDecimal!
+}
+
+type Transaction @entity {
+  id: ID! # txn hash
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  wraps: [Wrap]!
+  unwraps: [Unwrap]!
+}
+
+type Wrap @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  amount: BigDecimal!
+  to: Bytes!
+}
+
+type Unwrap @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  amount: BigDecimal!
+  to: Bytes!
 }

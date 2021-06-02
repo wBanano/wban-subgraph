@@ -8,9 +8,9 @@ dataSources:
     name: WBANToken
     network: bsc
     source:
-      address: '0xe20B9e246db5a0d21BF9209E4858Bc9A3ff7A034'
+      address: '0x9222D24274E912F4d5E889b460924C4fEFe97954'
       abi: WBANToken
-      startBlock: 7921781
+      startBlock: 9218649
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
