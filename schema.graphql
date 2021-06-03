@@ -31,10 +31,13 @@ type WBANToken @entity {
 
 type User @entity {
   id: ID!
+  banAddress: String!
   amount: BigDecimal!
   txnCount: BigDecimal!
   # liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
   # usdSwapped: BigDecimal!
+  wraps: [Wrap]!
+  unwraps: [Unwrap]!
 }
 
 type Transaction @entity {
@@ -59,4 +62,33 @@ type Unwrap @entity {
   timestamp: BigInt!
   amount: BigDecimal!
   to: Bytes!
+}
+
+type BenisFarm @entity {
+  id: ID!
+  depositsCount: BigInt!
+  withdrawalsCount: BigInt!
+}
+
+type BenisUser @entity {
+  id: ID!
+  farm: BigInt!
+  depositsCount: BigInt!
+  withdrawalsCount: BigInt!
+}
+
+type BenisDeposit @entity {
+  id: ID!
+  user: User!
+  farm: BigInt!
+  amount: BigDecimal!
+  timestamp: BigInt!
+}
+
+type BenisWithdrawal @entity {
+  id: ID!
+  user: User!
+  farm: BigInt!
+  amount: BigDecimal!
+  timestamp: BigInt!
 }

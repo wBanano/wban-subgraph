@@ -2,6 +2,8 @@ import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph
 import { User } from '../types/schema'
 
 export const WBAN_ADDRESS = '0x9222D24274E912F4d5E889b460924C4fEFe97954'
+export const BENIS_ADDRESS = '0x5501DE4089fCe613e78F60249930f0EF17eCfC4f'
+
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let BI_18 = BigInt.fromI32(18)
 export let ZERO_BI = BigInt.fromI32(0)
@@ -12,8 +14,11 @@ export function createUser(address: Address): void {
   let user = User.load(address.toHexString())
   if (user === null) {
     user = new User(address.toHexString())
+    user.banAddress = ''
     user.amount = ZERO_BD
     user.txnCount = ZERO_BD
+    user.wraps = []
+    user.unwraps = []
     user.save()
   }
 }
