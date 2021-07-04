@@ -23,6 +23,7 @@ export function handleDeposit(event: Deposit): void {
   let farm = BenisFarm.load(farmID.toString())
   if (farm === null) {
     farm = new BenisFarm(farmID.toString())
+		farm.totalAmount = BD_ZERO
     farm.depositsCount = ZERO_BI
     farm.withdrawalsCount = ZERO_BI
 		farm.currentHoldersCount = ZERO_BI
@@ -30,6 +31,7 @@ export function handleDeposit(event: Deposit): void {
 		farm.currentHolders = []
 		farm.allTimeHolders = []
   }
+	farm.totalAmount = farm.totalAmount.plus(amount)
   farm.depositsCount = farm.depositsCount.plus(ONE_BI)
 
   // update user stats for this farm
@@ -84,6 +86,7 @@ export function handleWithdraw(event: Withdraw): void {
 
   // update farm stats
   let farm = BenisFarm.load(farmID.toString())
+	farm.totalAmount = farm.totalAmount.minus(amount)
   farm.withdrawalsCount = farm.withdrawalsCount.plus(ONE_BI)
 
   // update user stats for this farm

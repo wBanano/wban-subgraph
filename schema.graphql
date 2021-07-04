@@ -43,6 +43,7 @@ type Unwrap @entity {
 
 type BenisFarm @entity {
   id: ID!
+	totalAmount: BigDecimal!
   depositsCount: BigInt!
   withdrawalsCount: BigInt!
 	currentHoldersCount: BigInt!
