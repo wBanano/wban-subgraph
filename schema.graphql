@@ -1,78 +1,34 @@
 type WBANToken @entity {
-  # wban address
-  id: ID!
-  totalSupply: BigDecimal!
-  currentHoldersCount: BigInt!
+	id: ID!                         # wBAN address
+	totalSupply: BigDecimal!
+	currentHoldersCount: BigInt!
 	allTimeHoldersCount: BigInt!
 }
 
 type User @entity {
-  id: ID!
-  banAddress: String!
-  amount: BigDecimal!
-  txnCount: BigDecimal!
-  # liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
-  # usdSwapped: BigDecimal!
-  wraps: [Wrap!]!
-  unwraps: [Unwrap!]!
-}
-
-type Transaction @entity {
-  id: ID! # txn hash
-  blockNumber: BigInt!
-  timestamp: BigInt!
-  wraps: [Wrap!]!
-  unwraps: [Unwrap!]!
-}
-
-type Wrap @entity {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-  amount: BigDecimal!
-  to: Bytes!
-}
-
-type Unwrap @entity {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-  amount: BigDecimal!
-  to: Bytes!
+	id: ID!                                                  # BSC address
+	banAddress: String!
+	wbanBalance: BigDecimal!                                 # amount of wBAN the user has (but not provided as liquidity)
+	positions: [BenisPosition!]! @derivedFrom(field: "user") # Array of positions
 }
 
 type BenisFarm @entity {
-  id: ID!
-	totalAmount: BigDecimal!
-  depositsCount: BigInt!
-  withdrawalsCount: BigInt!
+	id: ID!                                                  # Pool ID as a BigInt string
+	totalAmount: BigDecimal!                                 # Either LP token numbers or wBAN amounts for wBAN staking
+	depositsCount: BigInt!                                   # How many deposits where made in this farm
+	withdrawalsCount: BigInt!                                # How many withdrawals where made in this farm
 	currentHoldersCount: BigInt!
 	allTimeHoldersCount: BigInt!
-	currentHolders: [BenisUser!]!
-	allTimeHolders: [BenisUser!]!
+	currentHolders: [User!]!
+	allTimeHolders: [User!]!
 }
 
-type BenisUser @entity {
-  id: ID!
-  farm: BigInt!
-	banAddress: String!
-	position: BigDecimal!
-  depositsCount: BigInt!
-  withdrawalsCount: BigInt!
-}
-
-type BenisDeposit @entity {
-  id: ID!
-  user: User!
-  farm: BigInt!
-  amount: BigDecimal!
-  timestamp: BigInt!
-}
-
-type BenisWithdrawal @entity {
-  id: ID!
-  user: User!
-  farm: BigInt!
-  amount: BigDecimal!
-  timestamp: BigInt!
+# Position of the user in a given farm
+type BenisPosition @entity {
+	id: ID!                                                  # Concatenation of <pool-id>-<user address>
+	farm: BenisFarm!                                         # Link to the BenisFarm
+	user: User!                                              # Link to the User
+	tokenAmount: BigDecimal!                                 # Number of tokens (either wBAN or LP tokens) of the user for this specific farm
+	depositsCount: BigInt!                                   # How many deposits the user made in this farm
+	withdrawalsCount: BigInt!                                # How many withdrawals the user made in this farm
 }
