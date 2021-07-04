@@ -35,8 +35,8 @@ export function handleTransfer(event: Transfer): void {
   if (wban === null) {
     wban = new WBANToken(WBAN_ADDRESS)
     wban.totalSupply = BD_ZERO
-		wban.currentHolderCount = ZERO_BI
-		wban.allTimeHolderCount = ZERO_BI
+		wban.currentHoldersCount = ZERO_BI
+		wban.allTimeHoldersCount = ZERO_BI
   }
 
   let from = event.params.from
@@ -45,16 +45,14 @@ export function handleTransfer(event: Transfer): void {
 	let isNewUser = User.load(to.toHexString()) == null;
 	if (isNewUser) {
 		// if new users increase totalHodlers count
-		wban.allTimeHolderCount = wban.allTimeHolderCount.plus(ONE_BI)
-		let oldCount = wban.currentHolderCount
-		wban.currentHolderCount = oldCount.plus(ONE_BI)
+		wban.allTimeHoldersCount = wban.allTimeHoldersCount.plus(ONE_BI)
+		let oldCount = wban.currentHoldersCount
+		wban.currentHoldersCount = oldCount.plus(ONE_BI)
   } else if (User.load(to.toHexString()).amount.equals(BD_ZERO)) {
 		// if users had a zero balance, increase hodlers count
-		let oldCount = wban.currentHolderCount
-		wban.currentHolderCount = oldCount.plus(ONE_BI)
+		let oldCount = wban.currentHoldersCount
+		wban.currentHoldersCount = oldCount.plus(ONE_BI)
 	}
-
-  // const transactionHash = event.transaction.hash.toHexString()
 
   // token amount being transfered
   let value = convertTokenToDecimal(event.params.value, BI_18)
@@ -80,11 +78,12 @@ export function handleTransfer(event: Transfer): void {
 
   // if sender has no wBAN left, decrease hodlers count
   if (userFrom.amount.equals(BD_ZERO)) {
-		let oldCount = wban.currentHolderCount
-		wban.currentHolderCount = oldCount.minus(ONE_BI)
+		let oldCount = wban.currentHoldersCount
+		wban.currentHoldersCount = oldCount.minus(ONE_BI)
   }
 
-	/*
+	let transactionHash = event.transaction.hash.toHexString()
+
   // get or create transaction
   let transaction = Transaction.load(transactionHash)
   if (transaction === null) {
@@ -98,8 +97,6 @@ export function handleTransfer(event: Transfer): void {
   // wraps
   let wraps = transaction.wraps
   if (from.toHexString() === ADDRESS_ZERO) {
-    // update total supply
-    wban.totalSupply = wban.totalSupply.plus(value)
     // create new wrap
     let wrap = new Wrap(
         event.transaction.hash
@@ -114,11 +111,16 @@ export function handleTransfer(event: Transfer): void {
     wrap.save()
 
     // update wraps in transaction
-    transaction.wraps = wraps.concat([wrap.id])
+		wraps.push(wrap.id)
+		transaction.wraps = wraps
+    //transaction.wraps = wraps.concat([wrap.id])
+		transaction.save()
     // update wraps in user
-    userTo.wraps = userTo.wraps.concat([wrap.id])
+		let userWraps = userTo.wraps
+		userWraps.push(wrap.id)
+		userTo.wraps = userWraps
+    //userTo.wraps = userTo.wraps.concat([wrap.id])
   }
-	*/
 
 	// increase total supply when minting wBAN
 	if (from.toHexString() == ADDRESS_ZERO) {

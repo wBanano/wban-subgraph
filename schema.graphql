@@ -2,8 +2,8 @@ type WBANToken @entity {
   # wban address
   id: ID!
   totalSupply: BigDecimal!
-  currentHolderCount: BigInt!
-	allTimeHolderCount: BigInt!
+  currentHoldersCount: BigInt!
+	allTimeHoldersCount: BigInt!
 }
 
 type User @entity {
@@ -45,13 +45,17 @@ type BenisFarm @entity {
   id: ID!
   depositsCount: BigInt!
   withdrawalsCount: BigInt!
-	currentHolderCount: BigInt!
-	allTimeHolderCount: BigInt!
+	currentHoldersCount: BigInt!
+	allTimeHoldersCount: BigInt!
+	currentHolders: [BenisUser!]!
+	allTimeHolders: [BenisUser!]!
 }
 
 type BenisUser @entity {
   id: ID!
   farm: BigInt!
+	banAddress: String!
+	position: BigDecimal!
   depositsCount: BigInt!
   withdrawalsCount: BigInt!
 }
