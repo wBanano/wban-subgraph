@@ -1,8 +1,8 @@
 import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph-ts'
 import { User } from '../types/schema'
 
-export const WBAN_ADDRESS = '0x9222D24274E912F4d5E889b460924C4fEFe97954'
-export const BENIS_ADDRESS = '0x5501DE4089fCe613e78F60249930f0EF17eCfC4f'
+export const WBAN_ADDRESS = '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
+export const BENIS_ADDRESS = '0x1e30e12e82956540bf870a40fd1215fc083a3751'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let BI_18 = BigInt.fromI32(18)

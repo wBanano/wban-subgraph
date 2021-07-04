@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { BigInt, BigDecimal, store, Address, log } from '@graphprotocol/graph-ts'
+import { BigInt, BigDecimal, log, store, Address } from '@graphprotocol/graph-ts'
 import {
   WBANToken as WBAN,
   User,
@@ -9,7 +9,7 @@ import {
   Unwrap
 } from '../types/schema'
 import { Transfer, SwapToBan } from '../types/WBANToken/WBANToken'
-import { createUser, convertTokenToDecimal, WBAN_ADDRESS, ADDRESS_ZERO, BI_18, ONE_BI } from './helpers'
+import { createUser, convertTokenToDecimal, WBAN_ADDRESS, ADDRESS_ZERO, BI_18, ONE_BI, ZERO_BI } from './helpers'
 /// import { Pair as PairContract, Mint, Burn, Swap, Transfer, Sync } from '../types/templates/Pair/Pair'
 // import { updatePairDayData, updateTokenDayData, updateUniswapDayData, updatePairHourData } from './dayUpdates'
 // import { getEthPriceInUSD, findEthPerToken, getTrackedVolumeUSD, getTrackedLiquidityUSD } from './pricing'
@@ -35,22 +35,31 @@ export function handleTransfer(event: Transfer): void {
   if (wban === null) {
     wban = new WBANToken(WBAN_ADDRESS)
     wban.totalSupply = BD_ZERO
-    wban.hodlersCount = BD_ZERO
+		wban.currentHolderCount = ZERO_BI
+		wban.allTimeHolderCount = ZERO_BI
   }
 
   let from = event.params.from
   let to = event.params.to
 
-  // if new users increase hodler count
-  if (User.load(to.toHexString()) == null) {
-    const oldCount = wban.hodlersCount
-    wban.hodlersCount = oldCount.plus(BD_ONE)
-  }
+	let isNewUser = User.load(to.toHexString()) == null;
+	if (isNewUser) {
+		// if new users increase totalHodlers count
+		wban.allTimeHolderCount = wban.allTimeHolderCount.plus(ONE_BI)
+		let oldCount = wban.currentHolderCount
+		wban.currentHolderCount = oldCount.plus(ONE_BI)
+  } else if (User.load(to.toHexString()).amount.equals(BD_ZERO)) {
+		// if users had a zero balance, increase hodlers count
+		let oldCount = wban.currentHolderCount
+		wban.currentHolderCount = oldCount.plus(ONE_BI)
+	}
 
-  const transactionHash = event.transaction.hash.toHexString()
+  // const transactionHash = event.transaction.hash.toHexString()
 
   // token amount being transfered
-  const value = convertTokenToDecimal(event.params.value, BI_18)
+  let value = convertTokenToDecimal(event.params.value, BI_18)
+
+	log.info("Transfer of {} wBAN: {} -> {}", [value.toString(), from.toHexString(), to.toHexString()]);
 
   // user stats
   createUser(from)
@@ -59,19 +68,23 @@ export function handleTransfer(event: Transfer): void {
   // update amounts of each user
   let userFrom = User.load(from.toHexString())
   let userTo = User.load(to.toHexString())
-  userFrom.amount = userFrom.amount.minus(value)
-  userTo.amount = userTo.amount.plus(value)
+
+	if (from.toHexString() !== ADDRESS_ZERO) {
+  	userFrom.amount = userFrom.amount.minus(value)
+	}
+	if (to.toHexString() !== ADDRESS_ZERO) {
+  	userTo.amount = userTo.amount.plus(value)
+	}
   // update transaction count for this user
   userFrom.txnCount = userFrom.txnCount.plus(BD_ONE)
 
-  /*
   // if sender has no wBAN left, decrease hodlers count
   if (userFrom.amount.equals(BD_ZERO)) {
-    const oldCount = wban.hodlersCount
-    wban.hodlersCount = oldCount.minus(BD_ONE)
+		let oldCount = wban.currentHolderCount
+		wban.currentHolderCount = oldCount.minus(ONE_BI)
   }
-  */
 
+	/*
   // get or create transaction
   let transaction = Transaction.load(transactionHash)
   if (transaction === null) {
@@ -99,19 +112,26 @@ export function handleTransfer(event: Transfer): void {
     wrap.amount = value
     wrap.timestamp = transaction.timestamp
     wrap.save()
-    
+
     // update wraps in transaction
     transaction.wraps = wraps.concat([wrap.id])
     // update wraps in user
     userTo.wraps = userTo.wraps.concat([wrap.id])
   }
-  
+	*/
+
+	// increase total supply when minting wBAN
+	if (from.toHexString() == ADDRESS_ZERO) {
+		// update total supply
+		wban.totalSupply = wban.totalSupply.plus(value)
+	}
+	// decrease total supply when wBAN are burnt
   if (to.toHexString() == ADDRESS_ZERO) {
     // update total supply
     wban.totalSupply = wban.totalSupply.minus(value)
   }
 
-  transaction.save()
+  // transaction.save()
   userFrom.save()
   userTo.save()
   wban.save()

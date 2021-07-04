@@ -8,9 +8,10 @@ dataSources:
     name: WBANToken
     network: bsc
     source:
-      address: '0x9222D24274E912F4d5E889b460924C4fEFe97954'
+      address: '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
       abi: WBANToken
-      startBlock: 9218649
+      #startBlock: 7921830
+      startBlock: 7985815
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -30,9 +31,9 @@ dataSources:
     name: Benis
     network: bsc
     source:
-      address: '0x5501DE4089fCe613e78F60249930f0EF17eCfC4f'
+      address: '0x1e30e12e82956540bf870a40fd1215fc083a3751'
       abi: Benis
-      startBlock: 9218649
+      startBlock: 7981731
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

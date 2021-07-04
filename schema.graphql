@@ -1,32 +1,9 @@
 type WBANToken @entity {
   # wban address
   id: ID!
-
-  # used for other stats like marketcap
   totalSupply: BigDecimal!
-
-  hodlersCount: BigDecimal!
-
-  # token specific volume
-  #tradeVolume: BigDecimal!
-  #tradeVolumeUSD: BigDecimal!
-  #untrackedVolumeUSD: BigDecimal!
-
-  # transactions across all pairs
-  #txCount: BigInt!
-
-  # liquidity across all pairs
-  #totalLiquidity: BigDecimal!
-
-  # derived prices
-  #derivedETH: BigDecimal
-
-  # derived fields
-  #tokenDayData: [TokenDayData!]! @derivedFrom(field: "token")
-  #pairDayDataBase: [PairDayData!]! @derivedFrom(field: "token0")
-  #pairDayDataQuote: [PairDayData!]! @derivedFrom(field: "token1")
-  #pairBase: [Pair!]! @derivedFrom(field: "token0")
-  #pairQuote: [Pair!]! @derivedFrom(field: "token1")
+  currentHolderCount: BigInt!
+	allTimeHolderCount: BigInt!
 }
 
 type User @entity {
@@ -36,16 +13,16 @@ type User @entity {
   txnCount: BigDecimal!
   # liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
   # usdSwapped: BigDecimal!
-  wraps: [Wrap]!
-  unwraps: [Unwrap]!
+  wraps: [Wrap!]!
+  unwraps: [Unwrap!]!
 }
 
 type Transaction @entity {
   id: ID! # txn hash
   blockNumber: BigInt!
   timestamp: BigInt!
-  wraps: [Wrap]!
-  unwraps: [Unwrap]!
+  wraps: [Wrap!]!
+  unwraps: [Unwrap!]!
 }
 
 type Wrap @entity {
@@ -68,6 +45,8 @@ type BenisFarm @entity {
   id: ID!
   depositsCount: BigInt!
   withdrawalsCount: BigInt!
+	currentHolderCount: BigInt!
+	allTimeHolderCount: BigInt!
 }
 
 type BenisUser @entity {
