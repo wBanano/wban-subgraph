@@ -23,6 +23,12 @@ type User @entity {
 type BenisFarm @entity {
 	""" Pool ID as a BigInt string """
 	id: ID!
+	""" Type of farm (staking vs liquidity pool) """
+	type: BenisFarmType!
+	""" Allocation points for this farm """
+	allocPoint: Int!
+	""" How many wBAN per second this specific farm is rewarding """
+	allocWbanPerSecond: BigDecimal!
 	""" Either LP token numbers or wBAN amounts for wBAN staking """
 	totalAmount: BigDecimal!
 	""" How many deposits where made in this farm """
@@ -39,6 +45,11 @@ type BenisFarm @entity {
 	allTimeHolders: [User!]!
 }
 
+enum BenisFarmType {
+	Staking
+	LiquidityPool
+}
+
 """ Position of the user in a given farm """
 type BenisPosition @entity {
 	""" Concatenation of <pool-id>-<user address> """
@@ -49,6 +60,10 @@ type BenisPosition @entity {
 	user: User!
 	""" Number of tokens (either wBAN or LP tokens) of the user for this specific farm """
 	tokenAmount: BigDecimal!
+	# """ Amount of token0 -- optional and empty if wBAN staking farm """
+	# token0: BigDecimal
+	# """ Amount of token1 -- optional and empty if wBAN staking farm """
+	# token1: BigDecimal
 	""" How many deposits the user made in this farm """
 	depositsCount: BigInt!
 	""" How many withdrawals the user made in this farm """

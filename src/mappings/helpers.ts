@@ -1,4 +1,5 @@
-import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph-ts'
+import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
+import { Benis } from '../types/Benis/Benis'
 import { BenisFarm, BenisPosition, User } from '../types/schema'
 
 export const WBAN_ADDRESS = '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
@@ -22,8 +23,18 @@ export function createUser(address: Address): void {
 
 export function createBenisFarm(farmID: BigInt): void {
 	let farm = BenisFarm.load(farmID.toString())
+	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
+	let poolInfo = benis.poolInfo(farmID)
 	if (farm === null) {
 		farm = new BenisFarm(farmID.toString())
+		let stakingToken = poolInfo.value0
+		if (stakingToken == Address.fromString(WBAN_ADDRESS)) {
+			farm.type = "Staking"
+		} else {
+			farm.type = "LiquidityPool"
+		}
+		farm.allocPoint = 0
+		farm.allocWbanPerSecond = ZERO_BD
 		farm.totalAmount = ZERO_BD
 		farm.depositsCount = ZERO_BI
 		farm.withdrawalsCount = ZERO_BI
@@ -43,6 +54,8 @@ export function createBenisPosition(farmID: string, userAddress: string): void {
 		position.farm = farmID
 		position.user = userAddress
 		position.tokenAmount = ZERO_BD
+		// position.token0 = ZERO_BD
+		// position.token1 = ZERO_BD
 		position.depositsCount = ZERO_BI
 		position.withdrawalsCount = ZERO_BI
 		position.save()
@@ -54,6 +67,13 @@ export function convertTokenToDecimal(tokenAmount: BigInt, exchangeDecimals: Big
     return tokenAmount.toBigDecimal()
   }
   return tokenAmount.toBigDecimal().div(exponentToBigDecimal(exchangeDecimals))
+}
+
+export function convertTokenToDecimalUsingI32(tokenAmount: BigInt, exchangeDecimals: i32): BigDecimal {
+  if (exchangeDecimals == 0) {
+    return tokenAmount.toBigDecimal()
+  }
+  return tokenAmount.toBigDecimal().div(exponentToBigDecimal(BigInt.fromI32(exchangeDecimals)))
 }
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {

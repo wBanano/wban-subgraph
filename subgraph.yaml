@@ -10,8 +10,8 @@ dataSources:
     source:
       address: '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
       abi: WBANToken
-      startBlock: 7921830
-      #startBlock: 7985815
+      #startBlock: 7921830
+      startBlock: 7985815
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -44,6 +44,10 @@ dataSources:
       abis:
         - name: Benis
           file: ./abis/Benis.json
+        #- name: Pair
+        #  file: ./abis/Pair.json
+        #- name: ERC20
+        #  file: ./abis/ERC20.json
       eventHandlers:
         - event: Deposit(indexed address,indexed uint256,uint256)
           handler: handleDeposit
@@ -51,3 +55,22 @@ dataSources:
           handler: handleWithdraw
         - event: EmergencyWithdraw(indexed address,indexed uint256,uint256)
           handler: handleEmergencyWithdraw
+#templates:
+#  - kind: ethereum/contract
+#    name: Pair
+#    network: bsc
+#    source:
+#      abi: Pair
+#    mapping:
+#      kind: ethereum/events
+#      apiVersion: 0.0.4
+#      language: wasm/assemblyscript
+#      file: ./src/mappings/pair.ts
+#      entities:
+#        - Pair
+#        - Token
+#      abis:
+#        - name: Pair
+#          file: ./abis/Pair.json
+#        - name: ERC20
+#          file: ./abis/ERC20.json
