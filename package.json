@@ -12,7 +12,7 @@
     "deploy-staging": "graph deploy wBanano/wban-subgraph --debug --ipfs http://pve:5001 --node http://pve:8020",
 
     "create": "graph create wBanano/wban-subgraph --node https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy wBanano/wban-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "deploy": "graph deploy wbanano/wrapped-banano-on-bsc --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",

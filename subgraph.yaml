@@ -10,8 +10,8 @@ dataSources:
     source:
       address: '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
       abi: WBANToken
-      #startBlock: 7921830
-      startBlock: 7985815
+      startBlock: 7921830
+      #startBlock: 7985815
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

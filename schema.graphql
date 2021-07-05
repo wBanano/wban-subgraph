@@ -1,34 +1,56 @@
 type WBANToken @entity {
-	id: ID!                         # wBAN address
+	""" wBAN address """
+	id: ID!
+	""" wBAN total supply """
 	totalSupply: BigDecimal!
+	""" Count of current wBAN holders """
 	currentHoldersCount: BigInt!
+	""" Count of unique wBAN holders """
 	allTimeHoldersCount: BigInt!
 }
 
 type User @entity {
-	id: ID!                                                  # BSC address
+	""" BSC address """
+	id: ID!
+	""" Banano address """
 	banAddress: String!
-	wbanBalance: BigDecimal!                                 # amount of wBAN the user has (but not provided as liquidity)
-	positions: [BenisPosition!]! @derivedFrom(field: "user") # Array of positions
+	""" Amount of wBAN the user has (but not provided as liquidity) """
+	wbanBalance: BigDecimal!
+	""" Array of positions """
+	positions: [BenisPosition!]! @derivedFrom(field: "user")
 }
 
 type BenisFarm @entity {
-	id: ID!                                                  # Pool ID as a BigInt string
-	totalAmount: BigDecimal!                                 # Either LP token numbers or wBAN amounts for wBAN staking
-	depositsCount: BigInt!                                   # How many deposits where made in this farm
-	withdrawalsCount: BigInt!                                # How many withdrawals where made in this farm
+	""" Pool ID as a BigInt string """
+	id: ID!
+	""" Either LP token numbers or wBAN amounts for wBAN staking """
+	totalAmount: BigDecimal!
+	""" How many deposits where made in this farm """
+	depositsCount: BigInt!
+	""" How many withdrawals where made in this farm """
+	withdrawalsCount: BigInt!
+	""" Count of holders the farm currently has """
 	currentHoldersCount: BigInt!
+	""" Count of unique holders the farm had """
 	allTimeHoldersCount: BigInt!
+	""" List of current holders """
 	currentHolders: [User!]!
+	""" List of unique holders the farm had """
 	allTimeHolders: [User!]!
 }
 
-# Position of the user in a given farm
+""" Position of the user in a given farm """
 type BenisPosition @entity {
-	id: ID!                                                  # Concatenation of <pool-id>-<user address>
-	farm: BenisFarm!                                         # Link to the BenisFarm
-	user: User!                                              # Link to the User
-	tokenAmount: BigDecimal!                                 # Number of tokens (either wBAN or LP tokens) of the user for this specific farm
-	depositsCount: BigInt!                                   # How many deposits the user made in this farm
-	withdrawalsCount: BigInt!                                # How many withdrawals the user made in this farm
+	""" Concatenation of <pool-id>-<user address> """
+	id: ID!
+	""" Link to the BenisFarm """
+	farm: BenisFarm!
+	""" Link to the User """
+	user: User!
+	""" Number of tokens (either wBAN or LP tokens) of the user for this specific farm """
+	tokenAmount: BigDecimal!
+	""" How many deposits the user made in this farm """
+	depositsCount: BigInt!
+	""" How many withdrawals the user made in this farm """
+	withdrawalsCount: BigInt!
 }
