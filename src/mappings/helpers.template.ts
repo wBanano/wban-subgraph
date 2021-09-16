@@ -2,8 +2,8 @@ import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
 import { Benis } from '../types/Benis/Benis'
 import { BenisFarm, BenisPosition, User } from '../types/schema'
 
-export const WBAN_ADDRESS = '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034'
-export const BENIS_ADDRESS = '0x1e30e12e82956540bf870a40fd1215fc083a3751'
+export const WBAN_ADDRESS = '{{wban_address}}'
+export const BENIS_ADDRESS = '{{benis_address}}'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let BI_18 = BigInt.fromI32(18)

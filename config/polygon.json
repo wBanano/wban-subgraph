@@ -1,0 +1,7 @@
+{
+  "network": "matic",
+	"wban_address": "0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034",
+	"wban_start_block": "18548281",
+  "benis_address": "0xefa4aED9Cf41A8A0FcdA4e88EfA2F60675bAeC9F",
+	"benis_start_block": "18820405"
+}
