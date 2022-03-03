@@ -23,15 +23,15 @@ export function createUser(address: Address): void {
 
 export function createBenisFarm(farmID: BigInt): void {
 	let farm = BenisFarm.load(farmID.toString())
-	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
-	let poolInfo = benis.poolInfo(farmID)
 	if (farm === null) {
 		farm = new BenisFarm(farmID.toString())
+		let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
+		let poolInfo = benis.poolInfo(farmID)
 		let stakingToken = poolInfo.value0
 		if (stakingToken == Address.fromString(WBAN_ADDRESS)) {
-			farm.type = "Staking"
+			farm.type = 'Staking'
 		} else {
-			farm.type = "LiquidityPool"
+			farm.type = 'LiquidityPool'
 		}
 		farm.allocPoint = 0
 		farm.allocWbanPerSecond = ZERO_BD

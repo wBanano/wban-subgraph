@@ -7,25 +7,25 @@ import {
 	convertTokenToDecimal,
 	BI_18, ONE_BI,
 	createUser, createBenisFarm,
-	BENIS_ADDRESS
+	BENIS_ADDRESS,
 } from './helpers'
 
 let BD_ZERO = BigDecimal.fromString("0")
-let BD_ONE  = BigDecimal.fromString("1")
 
 export function handleDeposit(event: Deposit): void {
 	let farmID = event.params.pid
 	let amount = convertTokenToDecimal(event.params.amount, BI_18)
 	let userAddress = event.params.user.toHexString()
-	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
-	log.info("Requesting poolInfo #{}", [farmID.toString()])
-	let poolInfo = benis.poolInfo(farmID)
 
 	// update farm stats
 	createBenisFarm(farmID)
 	let farm = BenisFarm.load(farmID.toString())
 	farm.totalAmount = farm.totalAmount.plus(amount)
 	farm.depositsCount = farm.depositsCount.plus(ONE_BI)
+
+	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
+	log.info("Requesting poolInfo #{}", [farmID.toString()])
+	let poolInfo = benis.poolInfo(farmID)
 	farm.allocPoint = poolInfo.value4
 	farm.allocWbanPerSecond = convertTokenToDecimal(benis.wbanPerSecond(), BI_18)
 		.times(BigInt.fromI32(farm.allocPoint).toBigDecimal())
@@ -86,19 +86,21 @@ export function handleWithdraw(event: Withdraw): void {
   let farmID = event.params.pid
 	let amount = convertTokenToDecimal(event.params.amount, BI_18)
   let userAddress = event.params.user.toHexString()
-	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
-	log.info("Requesting poolInfo #{}", [farmID.toString()])
-	let poolInfo = benis.poolInfo(farmID)
 
 	// update farm stats
 	createBenisFarm(farmID)
 	let farm = BenisFarm.load(farmID.toString())
 	farm.totalAmount = farm.totalAmount.minus(amount)
   farm.withdrawalsCount = farm.withdrawalsCount.plus(ONE_BI)
+
+	let benis = Benis.bind(Address.fromString(BENIS_ADDRESS))
+	log.info("Requesting poolInfo #{}", [farmID.toString()])
+	let poolInfo = benis.poolInfo(farmID)
 	farm.allocPoint = poolInfo.value4
 	farm.allocWbanPerSecond = convertTokenToDecimal(benis.wbanPerSecond(), BI_18)
 		.times(BigInt.fromI32(farm.allocPoint).toBigDecimal())
 		.div(benis.totalAllocPoint().toBigDecimal())
+
 	// update user stats for this farm
 	createUser(event.params.user)
 	let user = User.load(userAddress)
@@ -130,11 +132,9 @@ export function handleWithdraw(event: Withdraw): void {
 	// check if user has still some value deposited into the farm
 	if (position.tokenAmount.equals(BD_ZERO)) {
 		let holders = farm.currentHolders
-		holders.push(userAddress)
-		farm.currentHolders = holders
-		let userIndex = holders.indexOf(userAddress);
+		let userIndex = holders.indexOf(userAddress)
 		if (userIndex > -1) {
-			holders.splice(userIndex, 1);
+			holders.splice(userIndex, 1)
 			farm.currentHolders = holders
 			farm.currentHoldersCount = farm.currentHoldersCount.minus(ONE_BI)
 		}

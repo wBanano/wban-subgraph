@@ -1,33 +1,32 @@
 {
-  "name": "wban-subgraph",
-  "version": "0.1.0",
-  "license": "GPL-3.0-or-later",
-  "scripts": {
-    "codegen": "graph codegen --output-dir src/types/",
-    "build": "graph build",
-
-		"prepare:bsc": "mustache config/bsc.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:polygon": "mustache config/polygon.json subgraph.template.yaml > subgraph.yaml && mustache config/polygon.json src/mappings/helpers.template.ts > src/mappings/helpers.ts",
-
-    "create-local": "graph create wBanano/wban-subgraph --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy wBanano/wban-subgraph --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "watch-local": "graph deploy wBanano/wban-subgraph --watch --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020/ ",
+	"name": "wban-subgraph",
+	"version": "0.1.0",
+	"license": "GPL-3.0-or-later",
+	"scripts": {
+		"codegen": "graph codegen --output-dir src/types/",
+		"build": "graph build",
+		"prepare:bsc": "mustache config/bsc.json subgraph.template.yaml > subgraph.yaml && mustache config/bsc.json src/mappings/helpers.template.ts > src/mappings/helpers.ts",
+		"prepare:polygon": "mustache config/polygon.json subgraph.template.yaml > subgraph.yaml && mustache config/polygon.json src/mappings/helpers.template.ts > src/mappings/helpers.ts",
+		"prepare:fantom": "mustache config/fantom.json subgraph.template.yaml > subgraph.yaml && mustache config/fantom.json src/mappings/helpers.template.ts > src/mappings/helpers.ts",
+		"create-local": "graph create wBanano/wban-subgraph --node http://127.0.0.1:8020",
+		"deploy-local": "graph deploy wBanano/wban-subgraph --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+		"watch-local": "graph deploy wBanano/wban-subgraph --watch --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020/ ",
 		"create-staging": "graph create wBanano/wban-subgraph --node http://graph-node-admin:8020",
-    "deploy-staging": "graph deploy wBanano/wban-subgraph --debug --ipfs http://ipfs:5001 --node http://graph-node-admin:8020",
-
-    "create": "graph create wBanano/wban-subgraph --node https://api.thegraph.com/deploy/",
-    "deploy:bsc": "graph deploy wbanano/wrapped-banano-on-bsc --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-		"deploy:polygon": "graph deploy wbanano/wrapped-banano-on-polygon --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
-  },
-  "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@graphprotocol/graph-ts": "^0.20.0",
-    "@typescript-eslint/eslint-plugin": "^4.13.0",
-    "@typescript-eslint/parser": "^4.13.0",
-    "eslint": "^7.17.0",
-    "eslint-config-prettier": "^7.1.0",
-    "mustache": "^4.2.0",
-    "prettier": "^2.2.1",
-    "typescript": "^4.1.3"
-  }
+		"deploy-staging": "graph deploy wBanano/wban-subgraph --debug --ipfs http://ipfs:5001 --node http://graph-node-admin:8020",
+		"create": "graph create wBanano/wban-subgraph --node https://api.thegraph.com/deploy/",
+		"deploy:bsc": "graph deploy wbanano/wrapped-banano-on-bsc --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+		"deploy:polygon": "graph deploy wbanano/wrapped-banano-on-polygon --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+		"deploy:fantom": "graph deploy wbanano/wrapped-banano-on-fantom --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+	},
+	"devDependencies": {
+		"@graphprotocol/graph-cli": "^0.20.0",
+		"@graphprotocol/graph-ts": "^0.20.0",
+		"@typescript-eslint/eslint-plugin": "^4.13.0",
+		"@typescript-eslint/parser": "^4.13.0",
+		"eslint": "^7.17.0",
+		"eslint-config-prettier": "^7.1.0",
+		"mustache": "^4.2.0",
+		"prettier": "^2.2.1",
+		"typescript": "^4.1.3"
+	}
 }

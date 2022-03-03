@@ -1,0 +1,7 @@
+{
+  "network": "fantom",
+	"wban_address": "0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034",
+	"wban_start_block": "31886671",
+	"benis_address": "0xD91f84D4E2d9f4fa508c61356A6CB81a306e5287",
+	"benis_start_block": "32472668"
+}
